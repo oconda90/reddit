@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/oconda90/reddit/issues"
   },
-  "homepage": "https://github.com/oconda90/reddit#readme"
+  "homepage": "https://github.com/oconda90/reddit#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
