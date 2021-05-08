@@ -15,3 +15,13 @@ module.exports = (app) => {
     });
 
 }; 
+ // get all posts
+ app.get('/', (req, res) => {
+    Post.find({}).lean()
+      .then(posts => {
+        res.render('posts-index', { posts });
+      })
+      .catch(err => {
+        console.log(err.message);
+      })
+})
