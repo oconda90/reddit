@@ -1,40 +1,36 @@
-const express = require('express')
-const app = express()
-const port = 3000
-const hbs = require('express-handlebars');
-const path = require('path')
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
+const express = require('express');
+
+// App Setup
+app = express();
 
 // Use Body Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator()); // Add after body parser initialization!
 
-// Add after body parser initialization!
-app.use(expressValidator());
+// Middleware
+const exphbs  = require('express-handlebars');
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
-app.engine('hbs', hbs({
-  layoutsDir: __dirname + '/views/layouts',
-  defaultLayout: 'index',
-  extname: 'hbs'
-}));
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+
+// All requires
+require('./controllers/posts.js')(app);
+require('./data/reddit-db'); // Set db
+
+
+// Routes
 app.get('/', (req, res) => {
-
-    res.render('main', { layout: 'index' });
-});
-
-app.get("/posts/new", (req, res) => {
-  res.render("posts-new.hbs")
+    res.render('home');
 })
 
+app.get('/posts/new', (req, res) => {
+    console.log('Loading posts-new')
+    res.render('posts-new');
+})
 
-
-require('./controllers/posts.js')(app);
-// Set db
-require('./data/reddit-db');
-
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-}) 
+app.listen(3000, () => {
+    console.log('Reddit-Clone listening on port localhost:3000!');
+});
